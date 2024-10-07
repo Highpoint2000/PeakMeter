@@ -1,3 +1,5 @@
+(() => {
+	
 ////////////////////////////////////////////////////////////
 ///                                                      ///
 ///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0 BETA)   ///
@@ -19,7 +21,6 @@ function debugLog(...messages) {
     }
 }
 
-(() => {
     // Variables and constants
 	const plugin_version = 'V1.0 BETA';
     let audioContext, analyser, dataArray;
@@ -58,7 +59,7 @@ function debugLog(...messages) {
         // Create and add the fourth element (for the peak meter)
         var targetDiv4 = document.createElement('div'); // Create new Div
         targetDiv4.className = 'panel-33'; // Set class
-        targetDiv4.id = 'meter-container'; // Set ID   
+        targetDiv4.id = 'peak-meter-container'; // Set ID   
         targetDiv4.style.width = '33%'; // Set width
 		
         if (window.innerHeight >= 860) {
