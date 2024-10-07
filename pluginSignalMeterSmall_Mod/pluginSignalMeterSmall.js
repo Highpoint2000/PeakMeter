@@ -481,7 +481,7 @@ function updateVolume() {
 
         // Squelch marker to never fall outside the region
         markerPositionMin = minMeterPosition + 1;
-        markerPositionMax = signalMeter.width - 1;
+        markerPositionMax = signalMeter.width - 1; 
 
         // Image signal locations in pixels:
         // 0, 16 | 1, 28 | 2, 40 | 3, 52 | 4, 64 | 5, 76 | 6, 88 | 7, 100 | 8, 112 | 9, 124 | +10, 144 | +20, 164 | +30, 184 | +40, 204 | +50, 224 | +60, 244
