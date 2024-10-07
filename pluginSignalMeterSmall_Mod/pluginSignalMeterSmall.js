@@ -33,8 +33,8 @@ function updateVolume() {
         document.addEventListener('DOMContentLoaded', function() {
             debugMode = false; // For debugging purposes only
 
-            const panels = Array.from(document.querySelectorAll('.panel-33'));
-            const container = panels.find(panel => panel.textContent.includes('PEAKMETER'));
+			const panels = Array.from(document.querySelectorAll('.panel-33'));
+            container = panels.find(panel => panel.textContent.includes('PEAKMETER'));
 
             const signalMeter = document.createElement('canvas');
             signalMeter.id = 'signal-meter-small-canvas';
@@ -49,8 +49,7 @@ function updateVolume() {
             markerCanvas.style.width = '256px';
             markerCanvas.style.height = '13px';
             markerCanvas.style.imageRendering = 'auto';
-			markerCanvas.style.top = '50px';
-            // markerCanvas.style.top = signalMeter.style.top;
+            markerCanvas.style.top = '50px';
             markerCanvas.style.left = signalMeter.style.left;
             // Inside or outside SIGNAL field
             if (isOutsideField) {
