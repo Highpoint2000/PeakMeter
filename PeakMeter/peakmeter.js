@@ -10,7 +10,7 @@
 ///                                                      ///
 ////////////////////////////////////////////////////////////
 
-let ConsoleDebug = false; // Define ConsoleDebug variable
+let ConsoleDebug = true; // Define ConsoleDebug variable
 
 ////////////////////////////////////////////////////////////
 
@@ -138,19 +138,20 @@ function debugLog(...messages) {
     });
 
     setInterval(function() {
-        debugLog(isConnected);
-        initAudioMeter(); // Call the function
-    }, 2000); // Interval of 2000 ms (2 seconds)
+		if (!Stream) {
+			checkStreamAndInit(); // Call the function
+		}
+    }, 1000); // Interval of 1000 ms (1 seconds)
 
-    // Function to check the stream object and initialize the audio meter
-    function checkStreamAndInit() {
-        if (typeof Stream !== 'undefined' && Stream.Fallback && Stream.Fallback.Player) {
-            initAudioMeter(); // Initialize the audio meter
-        } else {
-            debugLog("Stream, Fallback, or Player not found. Retrying in 500ms...");
-            setTimeout(checkStreamAndInit, 500); // Retry after 500ms
-        }
-    }
+	function checkStreamAndInit() {
+		// Check if Stream object and its Fallback property exist
+		if (typeof Stream !== 'undefined' && Stream && Stream.Fallback && Stream.Fallback.Player) {
+			debugLog('Stream object and Fallback.Player are available.');
+			initAudioMeter();  // Initialize the audio meter only if Stream and its properties exist
+		} else {
+			setTimeout(checkStreamAndInit, 500);  // Retry after 500ms if not available
+		}
+	}
 
     // Function to initialize the audio meter
     function initAudioMeter() {
@@ -299,29 +300,4 @@ function debugLog(...messages) {
         });
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // Existing initialization
-        
-        // Adding an event listener for connectivity status changes
-        Stream.on('connectivityChanged', (isConnected) => {
-            debugLog("Connectivity changed:", isConnected);
-            if (isConnected) {
-                debugLog("Starting stream...");
-                startStream(); // Start the stream
-            } else {
-                debugLog("Stopping stream...");
-                stopStream();  // Stop the stream
-            }
-        });
-    });
-
-    function startStream() {
-        checkStreamAndInit();  // Reinitialize the stream and audio meter
-    }
-
-    function stopStream() {
-        if (audioContext && analyser) {
-            analyser.disconnect(); // Disconnect the analyser
-        }
-    }
 })();
