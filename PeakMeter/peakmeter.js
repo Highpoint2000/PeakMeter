@@ -4,7 +4,7 @@
 ///                                                      ///
 ///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0 BETA)   ///
 ///                                                      ///
-///  by Highpoint                last update: 07.10.24   ///
+///  by Highpoint                last update: 08.10.24   ///
 ///                                                      ///
 ///  https://github.com/Highpoint2000/PEAKMETER         ///
 ///                                                      ///
@@ -135,6 +135,15 @@ function debugLog(...messages) {
 		
         // Draw scale marks
         drawScaleMarks();
+		
+		// Find the volume slider, set it to maximum and make it transparent
+		const volumeSlider = document.getElementById('volumeSlider');
+		if (volumeSlider) {
+			volumeSlider.value = volumeSlider.max; // Set to maximum value
+			volumeSlider.disabled = true; // Disable the slider to prevent interaction
+			volumeSlider.style.opacity = '0.25'; // Set opacity to 0.5 (adjust as needed for transparency)
+			volumeSlider.style.cursor = "default";
+		}
     });
 
     setInterval(function() {
@@ -171,7 +180,7 @@ function debugLog(...messages) {
 
             if (liveAudioPlayer.Amplification) {
                 liveAudioPlayer.Amplification.connect(analyser); // Connect to the analyser
-                // analyser.connect(audioContext.destination);  // Connect analyser to destination
+                // analyser.connect(audioContext.this.Audio.destination);  // Connect analyser to destination
                 startSignalMeter();
                 debugLog("Successfully connected to the LiveAudioPlayer.");
             } else {
