@@ -2,7 +2,7 @@
 	
 ////////////////////////////////////////////////////////////
 ///                                                      ///
-///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0 BETA2)   ///
+///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0)         ///
 ///                                                      ///
 ///  by Highpoint                last update: 08.10.24   ///
 ///                                                      ///
@@ -22,7 +22,7 @@ function debugLog(...messages) {
 }
 
     // Variables and constants
-	const plugin_version = 'V1.0 BETA2';
+	const plugin_version = 'V1.0';
     let audioContext, analyser, dataArray;
     let signalAmplification = 2;  // Amplification factor for the signal
     let signalThreshold = 5;  // Threshold for very low values
@@ -104,30 +104,30 @@ function debugLog(...messages) {
 
           @media only screen and (min-width: 769px) {
             #audio-meter-canvas {
-              width: 74%;
+              width: 70%;
               height: 130px;
               margin-top: -19px;
-              margin-left: 8px;
+              margin-left: 5px;
               position: relative;
             }
             #a-indicator {
               position: relative;
-              margin-top: 45px;
-              margin-left: -75%;
+              margin-top: 46px;
+              margin-left: -72.5%;
             }
           }
           @media only screen and (max-width: 768px) {
             #audio-meter-canvas {
-              width: 256px;
+              width: 230px;
               position: absolute;
               margin-top: -7px; 
-              margin-left: -123px;
+              margin-left: -113px;
               height: 130px;
             }
             #a-indicator {
               position: absolute;
-              margin-left: -132px;
-              margin-top: -10px;
+              margin-left: -122px;
+              margin-top: -8px;
               display: inline-block;
             }
           }
@@ -297,16 +297,6 @@ function debugLog(...messages) {
             signalCtx.fillRect(seventyPercentWidth, 0, signalWidth - seventyPercentWidth, 5);
         }
 
-        // Set transparency for the yellow line
-        signalCtx.globalAlpha = 0.75; // Set transparency (0.0 = fully transparent, 1.0 = fully opaque)
-        
-        // Draw a yellow vertical line at the top of the audiometer
-        signalCtx.fillStyle = '#FFFF00'; // Yellow for the line
-        signalCtx.fillRect(0, 0, 2.5, 15); // Draw the line (x=0, y=0, width=2.5, height=15)
-
-        // Reset transparency to 1.0 for subsequent drawings
-        signalCtx.globalAlpha = 1.0;
-
         // Draw the peak line if it is visible
         if (peakLineVisible) {
             const peakX = (peakLevel / 255) * signalCanvas.width;  // Calculate X position for the peak line
@@ -330,7 +320,7 @@ function debugLog(...messages) {
         const scalePositions = scaleValues.map(val => (val / 100) * signalCanvas.width);
 
         // Set text and line styles
-        signalCtx.font = '10px Arial, sans-serif'; // Set font size and family together
+        signalCtx.font = '9px Arial, sans-serif'; // Set font size and family together
         signalCtx.fillStyle = '#FFFFFF';
         signalCtx.textAlign = 'center';
 
