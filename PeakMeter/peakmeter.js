@@ -2,7 +2,7 @@
 	
 ////////////////////////////////////////////////////////////
 ///                                                      ///
-///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0)         ///
+///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0a)        ///
 ///                                                      ///
 ///  by Highpoint                last update: 08.10.24   ///
 ///                                                      ///
@@ -10,7 +10,8 @@
 ///                                                      ///
 ////////////////////////////////////////////////////////////
 
-let ConsoleDebug = false; // Define ConsoleDebug variable
+let volumeSliderEnable = false;	// set to 'true' to activate the volume control (default: false)
+let ConsoleDebug = false; 		// set to 'true' to activate console information for debugging
 
 ////////////////////////////////////////////////////////////
 
@@ -22,7 +23,7 @@ function debugLog(...messages) {
 }
 
     // Variables and constants
-	const plugin_version = 'V1.0';
+	const plugin_version = 'V1.0a';
     let audioContext, analyser, dataArray;
     let signalAmplification = 2;  // Amplification factor for the signal
     let signalThreshold = 5;  // Threshold for very low values
@@ -179,12 +180,14 @@ function debugLog(...messages) {
         drawScaleMarks();
 		
 		// Find the volume slider, set it to maximum and make it transparent
-		const volumeSlider = document.getElementById('volumeSlider');
-		if (volumeSlider) {
-			volumeSlider.value = volumeSlider.max; // Set to maximum value
-			volumeSlider.disabled = true; // Disable the slider to prevent interaction
-			volumeSlider.style.opacity = '0.25'; // Set opacity to 0.5 (adjust as needed for transparency)
-			volumeSlider.style.cursor = "default";
+		if (!volumeSliderEnable) {
+			const volumeSlider = document.getElementById('volumeSlider');
+			if (volumeSlider) {
+				volumeSlider.value = volumeSlider.max; // Set to maximum value
+				volumeSlider.disabled = true; // Disable the slider to prevent interaction
+				volumeSlider.style.opacity = '0.25'; // Set opacity to 0.5 (adjust as needed for transparency)
+				volumeSlider.style.cursor = "default";
+			}
 		}
     });
 
