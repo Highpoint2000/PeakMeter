@@ -10,7 +10,7 @@
 ///                                                      ///
 ////////////////////////////////////////////////////////////
 
-let ConsoleDebug = true; // Define ConsoleDebug variable
+let ConsoleDebug = false; // Define ConsoleDebug variable
 
 ////////////////////////////////////////////////////////////
 
