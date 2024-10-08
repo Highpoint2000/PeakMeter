@@ -83,7 +83,8 @@ function debugLog(...messages) {
         if (window.innerWidth >= 768) {
             AudiometerCanvas.style.width = '74%';
             AudiometerCanvas.style.height = "130px";
-            AudiometerCanvas.style.marginTop = '-17px'; 
+            AudiometerCanvas.style.marginTop = '-19px'; 
+			AudiometerCanvas.style.marginLeft = '-5px'; 
             AudiometerCanvas.style.position = 'relative'; // Set position to relative
         } else {
             AudiometerCanvas.style.width = '256px';  // Make sure 'width' is all lowercase
@@ -104,7 +105,7 @@ function debugLog(...messages) {
         if (window.innerWidth >= 768) {
             aContainer.style.position = 'relative'; // Set position to relative
             aContainer.style.marginTop = '45px'; 
-            aContainer.style.marginLeft = '-77%'; // Left margin for positioning
+            aContainer.style.marginLeft = '-79%'; // Left margin for positioning
         } else {	
             aContainer.style.position = 'absolute'; 
             aContainer.style.marginLeft = '-145px'; // Left margin for positioning
@@ -114,7 +115,8 @@ function debugLog(...messages) {
 		
         aContainer.style.height = '20px'; // Height for the "A" indicator
         aContainer.style.color = '#FFFFFF'; // Color for the "A"
-        aContainer.style.fontSize = '9px'; // Font size set to 9px
+        aContainer.style.fontSize = '8px'; // Font size set to 9px
+		aContainer.style.fontFamily = 'Arial, sans-serif'; 
         aContainer.textContent = 'A'; // Set the text for "A"
 
         // Add the canvas to the new div
@@ -288,7 +290,7 @@ function debugLog(...messages) {
         const scalePositions = scaleValues.map(val => (val / 100) * signalCanvas.width);
 
         // Set text and line styles
-        signalCtx.font = '9px';
+        signalCtx.font = '8px Arial, sans-serif'; // Set font size and family together
         signalCtx.fillStyle = '#FFFFFF';
         signalCtx.textAlign = 'center';
 
