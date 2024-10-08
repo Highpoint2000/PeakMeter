@@ -2,11 +2,11 @@
 	
 ////////////////////////////////////////////////////////////
 ///                                                      ///
-///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0 BETA)   ///
+///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0 BETA2)   ///
 ///                                                      ///
 ///  by Highpoint                last update: 08.10.24   ///
 ///                                                      ///
-///  https://github.com/Highpoint2000/PEAKMETER         ///
+///  https://github.com/Highpoint2000/PEAKMETER          ///
 ///                                                      ///
 ////////////////////////////////////////////////////////////
 
@@ -22,7 +22,7 @@ function debugLog(...messages) {
 }
 
     // Variables and constants
-	const plugin_version = 'V1.0 BETA';
+	const plugin_version = 'V1.0 BETA2';
     let audioContext, analyser, dataArray;
     let signalAmplification = 2;  // Amplification factor for the signal
     let signalThreshold = 5;  // Threshold for very low values
@@ -39,21 +39,24 @@ function debugLog(...messages) {
         var targetDiv1 = document.getElementById('pi-code-container'); // Select the first element
 
         if (targetDiv1) {
-            targetDiv1.style.width = '21%'; // Set width for targetDiv1
+            //targetDiv1.style.width = '21.333%'; // Set width for targetDiv1
+            targetDiv1.style.maxHeight = '123px';
         }
         
         var targetDiv2 = document.getElementById('freq-container'); // Select the second element
-        if (window.innerWidth >= 768) {
-            if (targetDiv2) {
-                targetDiv2.style.width = '21%'; // Set width for targetDiv2
-            }
+        if (targetDiv2) {
+            //targetDiv2.style.width = '21.333%'; // Set width for targetDiv2
+            targetDiv2.style.maxHeight = '123px';
         }
 
         // Select the next sibling element after targetDiv2
         var targetDiv3 = targetDiv2.nextElementSibling; // Next sibling element
 
         if (targetDiv3 && targetDiv3.tagName === 'DIV') { // Ensure targetDiv3 is a Div
-            targetDiv3.style.width = '21%'; // Set width for targetDiv3
+        if (window.innerWidth >= 768) {
+            //targetDiv3.style.width = '21.333%'; // Set width for targetDiv3
+        }
+            targetDiv3.style.maxHeight = '123px';
         }		
 
         // Create and add the fourth element (for the peak meter)
@@ -63,10 +66,73 @@ function debugLog(...messages) {
         targetDiv4.style.width = '33%'; // Set width
 		
         if (window.innerHeight >= 860) {
-            targetDiv4.style.height = '125px'; // Set height
+            //targetDiv4.style.maxHeight = '123px'; // Set height
         } else {
-            targetDiv4.style.height = '110px'; // Set height
+            //targetDiv4.style.maxHeight = '106px'; // Set height
         }
+
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+          @media only screen and (max-height: 860px) {
+            #peak-meter-container {
+              height: 106px;
+            }
+          }
+          @media only screen and (min-height: 861px) {
+            #peak-meter-container {
+              height: 123px;
+            }
+          }
+          @media only screen and (max-width: 824px) and (min-width: 768px) {
+            .signal-units.text-medium {
+              display: none !important;
+            }
+          }
+          @media only screen and (min-width: 768px) {
+            #pi-code-container,
+            #freq-container,
+            #freq-container + .panel-33 { /* Signal container */
+              width: 21.333%;
+            }
+          }
+          @media only screen and (max-width: 768px) {
+            #peak-meter-container {
+              margin-top: 30px;
+              height: 8px;
+            }
+          }
+
+          @media only screen and (min-width: 769px) {
+            #audio-meter-canvas {
+              width: 74%;
+              height: 130px;
+              margin-top: -19px;
+              margin-left: 8px;
+              position: relative;
+            }
+            #a-indicator {
+              position: relative;
+              margin-top: 45px;
+              margin-left: -75%;
+            }
+          }
+          @media only screen and (max-width: 768px) {
+            #audio-meter-canvas {
+              width: 256px;
+              position: absolute;
+              margin-top: -7px; 
+              margin-left: -123px;
+              height: 130px;
+            }
+            #a-indicator {
+              position: absolute;
+              margin-left: -132px;
+              margin-top: -10px;
+              display: inline-block;
+            }
+          }
+        `;
+        document.head.appendChild(styleElement);
 
         // Create the h2 element with the text "PEAKMETER"
         var meterHeader = document.createElement('h2'); // Create h2 element
@@ -79,44 +145,18 @@ function debugLog(...messages) {
         // Create the canvas element for the peak meter
         var AudiometerCanvas = document.createElement('canvas'); // Create canvas element
         AudiometerCanvas.id = 'audio-meter-canvas'; // Set ID
-	
-        if (window.innerWidth >= 768) {
-            AudiometerCanvas.style.width = '74%';
-            AudiometerCanvas.style.height = "130px";
-            AudiometerCanvas.style.marginTop = '-19px'; 
-			AudiometerCanvas.style.marginLeft = '-5px'; 
-            AudiometerCanvas.style.position = 'relative'; // Set position to relative
-        } else {
-            AudiometerCanvas.style.width = '256px';  // Make sure 'width' is all lowercase
-            AudiometerCanvas.style.position = 'absolute'; // Set position to absolute
-            AudiometerCanvas.style.marginTop = '-7px'; 
-            AudiometerCanvas.style.marginLeft = '-135px'; // Left margin for positioning
-            AudiometerCanvas.style.height = "130px";
-        }
-
         AudiometerCanvas.style.imageRendering = "auto";
         AudiometerCanvas.style.display = "inline-block";
         AudiometerCanvas.style.cursor = "pointer";
-		AudiometerCanvas.title = `Plugin Version: ${plugin_version}`;
+        AudiometerCanvas.title = `Plugin Version: ${plugin_version}`;
 		
         // Create a new div for the "A" indicator
         var aContainer = document.createElement('div');
-
-        if (window.innerWidth >= 768) {
-            aContainer.style.position = 'relative'; // Set position to relative
-            aContainer.style.marginTop = '45px'; 
-            aContainer.style.marginLeft = '-79%'; // Left margin for positioning
-        } else {	
-            aContainer.style.position = 'absolute'; 
-            aContainer.style.marginLeft = '-145px'; // Left margin for positioning
-            aContainer.style.marginTop = '-10px'; // Top margin for positioning
-            aContainer.style.display = "inline-block";
-        }	
-		
+        aContainer.id = 'a-indicator'; // Set the ID for the "A" indicator
         aContainer.style.height = '20px'; // Height for the "A" indicator
         aContainer.style.color = '#FFFFFF'; // Color for the "A"
         aContainer.style.fontSize = '8px'; // Font size set to 9px
-		aContainer.style.fontFamily = 'Arial, sans-serif'; 
+        aContainer.style.fontFamily = 'Arial, sans-serif'; 
         aContainer.textContent = 'A'; // Set the text for "A"
 
         // Add the canvas to the new div
@@ -149,10 +189,10 @@ function debugLog(...messages) {
     });
 
     setInterval(function() {
-		if (!Stream) {
-			checkStreamAndInit(); // Call the function
-		}
-    }, 1000); // Interval of 1000 ms (1 seconds)
+      if (!Stream) {
+        checkStreamAndInit(); // Call the function
+      }
+    }, 1000); // Interval of 1000 ms (1 second)
 
 	function checkStreamAndInit() {
 		// Check if Stream object and its Fallback property exist
@@ -290,7 +330,7 @@ function debugLog(...messages) {
         const scalePositions = scaleValues.map(val => (val / 100) * signalCanvas.width);
 
         // Set text and line styles
-        signalCtx.font = '8px Arial, sans-serif'; // Set font size and family together
+        signalCtx.font = '10px Arial, sans-serif'; // Set font size and family together
         signalCtx.fillStyle = '#FFFFFF';
         signalCtx.textAlign = 'center';
 
