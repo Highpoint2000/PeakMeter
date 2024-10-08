@@ -5,11 +5,11 @@ The plugin displays the current audio level. The box provided also integrates th
 ![image](https://github.com/user-attachments/assets/5872fd92-d3f8-4214-bb6c-c096c4ad2a0a)
 
 
-### v1.0 Beta2
+### v1.0
 
-- show audiopeakmeter
+- Make the boxes for PI code, frequency and signal smaller
+- Show audiopeakmeter in a new box with space to display the SignalMeterSmall (see important notes!)
 - set volume to 100% an disable volume slider 
-
 
 ## Installation notes:
 
@@ -21,7 +21,7 @@ The plugin displays the current audio level. The box provided also integrates th
 
 ## Important notes: 
 
-- Coming soon: Adapted version of the SignalMeterSmall for correct display in the Peakmeter Box
+- You can download an adapted version of the SignalMeterSmall for correct display in the peak meter box here: https://github.com/AmateurAudioDude/FM-DX-Webserver-Plugin-S-Meter
   
 ## History:
 
