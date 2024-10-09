@@ -4,10 +4,11 @@ The plugin displays the current audio level. The box provided also integrates th
 
 ![image](https://github.com/user-attachments/assets/5872fd92-d3f8-4214-bb6c-c096c4ad2a0a)
 
+## v1.1
 
-## v1.0a
-
-- Activation of the volume control slider built into the header of the script
+- Set the value 0.1-1.0 to reduce the input volume/sensitivity into the header of the script (useful for Receivers with volume control)
+- Low-pass filter (low-shelf) and high-pass filter (high-pass) integrated
+- Volume display algorithm revised
 
 ## Installation notes:
 
@@ -26,16 +27,20 @@ The plugin displays the current audio level. The box provided also integrates th
 
 The following variables can be changed in the header of the script:
 
-  volumeSliderValue               // Set the value 0.1-1.0 to reduce the input volume/sensitivity (default: 1.0)
-- volumeSliderEnable              // set to 'true' to activate the manuel volume control (default: false)
-- ConsoleDebug                    // set to 'true' to activate console information for debugging
-- minVolumeThreshold = 0.5        // Threshold for audio display activation
-- riseRate = 1.93                 // Rate of increase (the higher, the faster)
-- amplificationFactor = 0.21      // Amplification factor
-- bassReductionFactor = -10       // Reduction of bass frequencies (in dB)
-- highPassCutoffFrequency = 1000   / Cutoff frequency for high-pass filter (in Hz)
-  
+      volumeSliderValue               // Set the value 0.1-1.0 to reduce the input volume/sensitivity (default: 1.0)
+      volumeSliderEnable              // set to 'true' to activate the manuel volume control (default: false)
+      ConsoleDebug                    // set to 'true' to activate console information for debugging
+      minVolumeThreshold = 0.5        // Threshold for audio display activation
+      riseRate = 1.93                 // Rate of increase (the higher, the faster)
+      amplificationFactor = 0.21      // Amplification factor
+      bassReductionFactor = -10       // Reduction of bass frequencies (in dB)
+      highPassCutoffFrequency = 1000  // Cutoff frequency for high-pass filter (in Hz)
+ 
 ## History:
+
+### v1.0a
+
+- Activation of the volume control slider built into the header of the script
 
 ### v1.0
 
