@@ -2,16 +2,22 @@
 	
 ////////////////////////////////////////////////////////////
 ///                                                      ///
-///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.0a)        ///
+///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.1)         ///
 ///                                                      ///
-///  by Highpoint                last update: 08.10.24   ///
+///  by Highpoint                last update: 09.10.24   ///
 ///                                                      ///
 ///  https://github.com/Highpoint2000/PEAKMETER          ///
 ///                                                      ///
 ////////////////////////////////////////////////////////////
 
-let volumeSliderEnable = false;	// set to 'true' to activate the volume control (default: false)
-let ConsoleDebug = false; 		// set to 'true' to activate console information for debugging
+let volumeSliderValue = 1.0;		// Set the value 0.1-1.0 to reduce the input volume/sensitivity (default: 1.0)
+let volumeSliderEnable = false;		// set to 'true' to activate the manuel volume control (default: false)
+let ConsoleDebug = false; 			// set to 'true' to activate console information for debugging
+let minVolumeThreshold = 0.5;  		// Threshold for audio display activation
+let riseRate = 1.93;           		// Rate of increase (the higher, the faster)
+let amplificationFactor = 0.21;  	// Amplification factor
+let bassReductionFactor = -10; 		// Reduction of bass frequencies (in dB)
+let highPassCutoffFrequency = 1000; // Cutoff frequency for high-pass filter (in Hz)
 
 ////////////////////////////////////////////////////////////
 
@@ -22,11 +28,8 @@ function debugLog(...messages) {
     }
 }
 
-    // Variables and constants
-	const plugin_version = 'V1.0a';
-    let audioContext, analyser, dataArray;
-    let signalAmplification = 2;  // Amplification factor for the signal
-    let signalThreshold = 5;  // Threshold for very low values
+	const plugin_version = 'V1.1';
+	let audioContext, analyser, dataArray, bassFilter, highPassFilter;
     let peakLevel = 1;  // Track the highest signal level
     let peakLineVisible = false;  // Flag to show the peak line
     let peakLineTimeout;  // Timeout for resetting the peak line
@@ -180,10 +183,14 @@ function debugLog(...messages) {
         drawScaleMarks();
 		
 		// Find the volume slider, set it to maximum and make it transparent
+
+		const volumeSlider = document.getElementById('volumeSlider');
+		if (volumeSlider) {
+			volumeSlider.value = volumeSliderValue; // Set to value
+		}
+
 		if (!volumeSliderEnable) {
-			const volumeSlider = document.getElementById('volumeSlider');
 			if (volumeSlider) {
-				volumeSlider.value = volumeSlider.max; // Set to maximum value
 				volumeSlider.disabled = true; // Disable the slider to prevent interaction
 				volumeSlider.style.opacity = '0.25'; // Set opacity to 0.5 (adjust as needed for transparency)
 				volumeSlider.style.cursor = "default";
@@ -215,6 +222,17 @@ function debugLog(...messages) {
         analyser.fftSize = 256; // Set the FFT size
         dataArray = new Uint8Array(analyser.frequencyBinCount);
 
+        // Set up the bass reduction filter (Low-Shelf Filter)
+        bassFilter = audioContext.createBiquadFilter();
+        bassFilter.type = 'lowshelf'; // Apply a low-shelf filter to affect bass
+        bassFilter.frequency.setValueAtTime(200, audioContext.currentTime); // Target frequencies below 200Hz
+        bassFilter.gain.setValueAtTime(bassReductionFactor, audioContext.currentTime); // Reduce the gain based on bassReductionFactor
+
+        // Set up the high-pass filter
+        highPassFilter = audioContext.createBiquadFilter();
+        highPassFilter.type = 'highpass'; // Apply a high-pass filter
+        highPassFilter.frequency.setValueAtTime(highPassCutoffFrequency, audioContext.currentTime); // Target frequencies above highPassCutoffFrequency
+
         connectTo3LASPlayer(); // Connect to the 3LAS player (stream)
     }
 
@@ -224,8 +242,11 @@ function debugLog(...messages) {
             const liveAudioPlayer = Stream.Fallback.Player;  // Access the LiveAudioPlayer
 
             if (liveAudioPlayer.Amplification) {
-                liveAudioPlayer.Amplification.connect(analyser); // Connect to the analyser
-                // analyser.connect(audioContext.this.Audio.destination);  // Connect analyser to destination
+                // Connect the audio chain
+                liveAudioPlayer.Amplification.connect(bassFilter); // Connect the player's amplification to the bass filter
+                bassFilter.connect(highPassFilter);  // Connect the bass filter to the high-pass filter
+                highPassFilter.connect(analyser);  // Connect the high-pass filter to the analyser
+                
                 startSignalMeter();
                 debugLog("Successfully connected to the LiveAudioPlayer.");
             } else {
@@ -240,7 +261,7 @@ function debugLog(...messages) {
 
     // Function to start the audio signal meter
     function startSignalMeter() {
-        setInterval(updateSignalMeter, 100);  // Update every 100ms
+        setInterval(updateSignalMeter, 75);  // Update every 75ms
     }
 
     // Function to update the signal meter
@@ -253,13 +274,16 @@ function debugLog(...messages) {
         // Calculate signal strength based on frequency data
         let signalLevel = dataArray.reduce((a, b) => a + b) / dataArray.length;
 
-        // Apply amplification to the signal
-        signalLevel *= signalAmplification;
-
-        // Apply threshold: if signalLevel is below the threshold, set it to zero
-        if (signalLevel < signalThreshold) {
+        // Apply threshold: display only if signalLevel is greater than the threshold
+        if (signalLevel < minVolumeThreshold) {
             signalLevel = 0;
         }
+
+        // Apply amplification
+        signalLevel *= amplificationFactor;
+
+        // Apply rise rate
+        signalLevel = Math.pow(signalLevel, riseRate);
 
         // Cap the signal level at 255 (the maximum value for the signal meter)
         signalLevel = Math.min(signalLevel, 255);
@@ -312,6 +336,7 @@ function debugLog(...messages) {
         }
     }
 
+	
     // Function to draw scale marks
     function drawScaleMarks() {
         // Draw the background bar
