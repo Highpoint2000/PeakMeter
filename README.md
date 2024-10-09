@@ -21,6 +21,19 @@ The plugin displays the current audio level. The box provided also integrates th
 
 - You can download an adapted version of the SignalMeterSmall for correct display in the peak meter box here: https://github.com/AmateurAudioDude/FM-DX-Webserver-Plugin-S-Meter
 - If you use the volume slider to recalibrate the volume, you should save the determined reference volume in the web server settings under Tuner as the starting volume. This will restore this setting for all users when the website is accessed.
+
+## Configuration options:
+
+The following variables can be changed in the header of the script:
+
+  volumeSliderValue               // Set the value 0.1-1.0 to reduce the input volume/sensitivity (default: 1.0)
+- volumeSliderEnable              // set to 'true' to activate the manuel volume control (default: false)
+- ConsoleDebug                    // set to 'true' to activate console information for debugging
+- minVolumeThreshold = 0.5        // Threshold for audio display activation
+- riseRate = 1.93                 // Rate of increase (the higher, the faster)
+- amplificationFactor = 0.21      // Amplification factor
+- bassReductionFactor = -10       // Reduction of bass frequencies (in dB)
+- highPassCutoffFrequency = 1000   / Cutoff frequency for high-pass filter (in Hz)
   
 ## History:
 
