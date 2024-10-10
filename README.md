@@ -4,11 +4,9 @@ The plugin displays the current audio level. The box provided also integrates th
 
 ![image](https://github.com/user-attachments/assets/5872fd92-d3f8-4214-bb6c-c096c4ad2a0a)
 
-## v1.1
+## v1.1a
 
-- Set the value 0.1-1.0 to reduce the input volume/sensitivity into the header of the script (useful for Receivers with volume control)
-- Low-pass filter (low-shelf) and high-pass filter (high-pass) integrated
-- Volume display algorithm revised
+- Improved look: adjusted font size for PI code, frequency and signal strength
 
 ## Installation notes:
 
@@ -37,6 +35,12 @@ The following variables can be changed in the header of the script:
       highPassCutoffFrequency = 1000  // Cutoff frequency for high-pass filter (in Hz)
  
 ## History:
+
+### v1.1
+
+- Set the value 0.1-1.0 to reduce the input volume/sensitivity into the header of the script (useful for Receivers with volume control)
+- Low-pass filter (low-shelf) and high-pass filter (high-pass) integrated
+- Volume display algorithm revised
 
 ### v1.0a
 
