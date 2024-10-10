@@ -2,8 +2,7 @@
 
 The plugin displays the current audio level. The box provided also integrates the SignalMeterSmall Plugin.
 
-![image](https://github.com/user-attachments/assets/05ab0a3e-17b2-45f6-855f-e6e674146bb2)
-
+![image](https://github.com/user-attachments/assets/eb698a59-51ea-442f-92f7-f1c12d5d41f5)
 
 ## v1.1a
 
