@@ -2,9 +2,9 @@
 	
 ////////////////////////////////////////////////////////////
 ///                                                      ///
-///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.1)         ///
+///  PEAKMETER SCRIPT FOR FM-DX-WEBSERVER (V1.1a)        ///
 ///                                                      ///
-///  by Highpoint                last update: 09.10.24   ///
+///  by Highpoint                last update: 10.10.24   ///
 ///                                                      ///
 ///  https://github.com/Highpoint2000/PEAKMETER          ///
 ///                                                      ///
@@ -28,7 +28,7 @@ function debugLog(...messages) {
     }
 }
 
-	const plugin_version = 'V1.1';
+	const plugin_version = 'V1.1a';
 	let audioContext, analyser, dataArray, bassFilter, highPassFilter;
     let peakLevel = 1;  // Track the highest signal level
     let peakLineVisible = false;  // Flag to show the peak line
@@ -77,6 +77,9 @@ function debugLog(...messages) {
 
         const styleElement = document.createElement('style');
         styleElement.textContent = `
+		  .text-big {
+			font-size: 45px;
+		  }
           @media only screen and (max-height: 860px) {
             #peak-meter-container {
               height: 106px;
@@ -97,6 +100,7 @@ function debugLog(...messages) {
             #freq-container,
             #freq-container + .panel-33 { /* Signal container */
               width: 21.333%;
+			  padding: 5px;
             }
           }
           @media only screen and (max-width: 768px) {
@@ -116,7 +120,7 @@ function debugLog(...messages) {
             }
             #a-indicator {
               position: relative;
-              margin-top: 46px;
+              margin-top: 40px;
               margin-left: -72.5%;
             }
           }
@@ -140,7 +144,7 @@ function debugLog(...messages) {
 
         // Create the h2 element with the text "PEAKMETER"
         var meterHeader = document.createElement('h2'); // Create h2 element
-        meterHeader.style.marginTop = '6px'; // Set margin-top
+        meterHeader.style.marginTop = '12px'; // Set margin-top
         meterHeader.textContent = 'PEAKMETER'; // Set text content
 
         // Add the h2 to the new Div
